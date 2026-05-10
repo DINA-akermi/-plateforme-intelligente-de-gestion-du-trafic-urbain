@@ -1,30 +1,76 @@
+require("dotenv").config();
+
 const express = require("express");
+const cors = require("cors");
+const sequelize = require("./config/db");
+
+const { ApolloServer } = require("apollo-server-express");
+
 const jwt = require("jsonwebtoken");
 
+const authRoutes = require("./routes/authRoutes");
+
+const typeDefs = require("./graphql/typeDefs");
+const resolvers = require("./graphql/resolvers");
+
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
-const SECRET = "mysecret";
+app.use("/api/auth", authRoutes);
 
-let users = [];
+async function startServer() {
 
-app.post("/register", (req, res) => {
-  const user = { id: Date.now(), ...req.body };
-  users.push(user);
-  res.json(user);
-});
+  // Apollo Server (GraphQL)
+  const server = new ApolloServer({
 
-app.post("/login", (req, res) => {
-  const user = users.find(u => u.email === req.body.email);
+    typeDefs,
+    resolvers,
 
-  if (!user) return res.status(404).json({ message: "User not found" });
+    context: ({ req }) => {
 
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    SECRET
-  );
+      const token = req.headers.authorization || "";
 
-  res.json({ token });
-});
+      if (token) {
+        try {
 
-app.listen(3000, () => console.log("Auth service running"));
+          const decoded = jwt.verify(
+            token.replace("Bearer ", ""),
+            process.env.JWT_SECRET
+          );
+
+          return { user: decoded };
+
+        } catch (err) {
+          console.log("Invalid token");
+          return {};
+        }
+      }
+
+      return {};
+    }
+  });
+
+  await server.start();
+
+  server.applyMiddleware({ app });
+
+  sequelize.sync()
+    .then(() => {
+
+      app.listen(process.env.PORT, () => {
+
+        console.log(` Auth Service running on http://localhost:${process.env.PORT}`);
+
+        console.log(`REST API: http://localhost:${process.env.PORT}/api/auth`);
+
+        console.log(` GraphQL: http://localhost:${process.env.PORT}${server.graphqlPath}`);
+      });
+    })
+    .catch(err => {
+      console.log("DB Error:", err);
+    });
+}
+
+startServer();
