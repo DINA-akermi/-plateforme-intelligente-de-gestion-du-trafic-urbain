@@ -1,13 +1,13 @@
 # 🚦 Plateforme Intell
 igente de Gestion du Trafic Urbain
 
-## 📌 Description
+##Description
 Ce projet est une plateforme web de gestion intelligente du trafic urbain.  
 Elle permet de surveiller les véhicules, gérer les incidents, envoyer des notifications et analyser le trafic en temps réel.
 
 ---
 
-## 🏗️ Architecture du projet
+## Architecture du projet
 
 Le projet est basé sur une architecture microservices :
 
@@ -20,7 +20,7 @@ Le projet est basé sur une architecture microservices :
 
 ---
 
-## ⚙️ Technologies utilisées
+## Technologies utilisées
 
 - Frontend : React, Vite, CSS
 - Backend : Node.js / Express
