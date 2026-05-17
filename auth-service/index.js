@@ -8,7 +8,11 @@ const { ApolloServer } = require("apollo-server-express");
 
 const jwt = require("jsonwebtoken");
 
+<<<<<<< HEAD
 const authRoutes = require("./Routes/authRoutes");
+=======
+const authRoutes = require("./routes/authRoutes");
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
@@ -59,10 +63,20 @@ async function startServer() {
   sequelize.sync()
     .then(() => {
 
+<<<<<<< HEAD
       app.listen(process.env.PORT, "127.0.0.1", () => {
         console.log(` Auth Service running on http://127.0.0.1:${process.env.PORT}`);
         console.log(`REST API: http://127.0.0.1:${process.env.PORT}/api/auth`);
         console.log(` GraphQL: http://127.0.0.1:${process.env.PORT}${server.graphqlPath}`);
+=======
+      app.listen(process.env.PORT, () => {
+
+        console.log(` Auth Service running on http://localhost:${process.env.PORT}`);
+
+        console.log(`REST API: http://localhost:${process.env.PORT}/api/auth`);
+
+        console.log(` GraphQL: http://localhost:${process.env.PORT}${server.graphqlPath}`);
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
       });
     })
     .catch(err => {

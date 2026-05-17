@@ -10,10 +10,13 @@ const Notification = sequelize.define("Notification", {
     type: DataTypes.STRING,
     defaultValue: "INFO"
   },
+<<<<<<< HEAD
   recipientRole: {
     type: DataTypes.ENUM("ADMIN", "OPERATOR", "ALL"),
     defaultValue: "ALL"
   },
+=======
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
   isRead: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

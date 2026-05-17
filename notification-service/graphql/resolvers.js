@@ -1,4 +1,5 @@
 const Notification = require("../models/Notification");
+<<<<<<< HEAD
 const { Op } = require("sequelize");
 
 const resolvers = {
@@ -26,10 +27,30 @@ const resolvers = {
         console.error("Resolver error:", err);
         throw err;
       }
+=======
+
+const resolvers = {
+
+  Query: {
+
+    // GET ALL NOTIFICATIONS
+    getNotifications: async () => {
+
+      return await Notification.findAll({
+        order: [["createdAt", "DESC"]]
+      });
+    },
+
+    // GET ONE NOTIFICATION
+    getNotification: async (_, { id }) => {
+
+      return await Notification.findByPk(id);
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
     }
   },
 
   Mutation: {
+<<<<<<< HEAD
     createNotification: async (_, { message, type, recipientRole }, { user }) => {
       return await Notification.create({ 
         message, 
@@ -43,6 +64,37 @@ const resolvers = {
         notification.isRead = true;
         await notification.save();
       }
+=======
+
+    // CREATE NOTIFICATION
+    createNotification: async (_, args) => {
+
+      const notification = await Notification.create({
+
+        message: args.message,
+
+        type: args.type || "INFO",
+
+        isRead: false
+      });
+
+      return notification;
+    },
+
+    // MARK AS READ
+    markAsRead: async (_, { id }) => {
+
+      const notification = await Notification.findByPk(id);
+
+      if (!notification) {
+        throw new Error("Notification not found");
+      }
+
+      notification.isRead = true;
+
+      await notification.save();
+
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
       return notification;
     }
   }

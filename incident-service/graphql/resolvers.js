@@ -1,20 +1,33 @@
 const Incident = require("../models/Incident");
+<<<<<<< HEAD
 const axios = require("axios");
+=======
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 
 const resolvers = {
 
   Query: {
+<<<<<<< HEAD
     incidents: async (_, __, { user }) => {
       if (!user) throw new Error("Authentication required");
       return await Incident.findAll();
     },
     incident: async (_, { id }, { user }) => {
       if (!user) throw new Error("Authentication required");
+=======
+
+    incidents: async () => {
+      return await Incident.findAll();
+    },
+
+    incident: async (_, { id }) => {
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
       return await Incident.findByPk(id);
     }
   },
 
   Mutation: {
+<<<<<<< HEAD
     createIncident: async (_, args, { user }) => {
       if (!user) throw new Error("Authentication required");
       
@@ -61,6 +74,39 @@ const resolvers = {
       if (!incident) throw new Error("Incident not found");
 
       await incident.destroy();
+=======
+
+    createIncident: async (_, args) => {
+
+      return await Incident.create(args);
+    },
+
+    updateIncidentStatus: async (_, { id, status }) => {
+
+      const incident = await Incident.findByPk(id);
+
+      if (!incident) {
+        throw new Error("Incident not found");
+      }
+
+      incident.status = status;
+
+      await incident.save();
+
+      return incident;
+    },
+
+    deleteIncident: async (_, { id }) => {
+
+      const incident = await Incident.findByPk(id);
+
+      if (!incident) {
+        throw new Error("Incident not found");
+      }
+
+      await incident.destroy();
+
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
       return "Incident deleted";
     }
   }

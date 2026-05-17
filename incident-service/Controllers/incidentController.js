@@ -1,6 +1,12 @@
 const axios = require("axios");
 const Incident = require("../models/Incident");
 
+<<<<<<< HEAD
+=======
+/* ========================
+   GET ALL INCIDENTS
+======================== */
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 exports.getAllIncidents = async (req, res) => {
   try {
     const incidents = await Incident.findAll();
@@ -10,6 +16,12 @@ exports.getAllIncidents = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+=======
+/* ========================
+   GET INCIDENT BY ID
+======================== */
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 exports.getIncidentById = async (req, res) => {
   try {
     const incident = await Incident.findByPk(req.params.id);
@@ -24,6 +36,12 @@ exports.getIncidentById = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+=======
+/* ========================
+   CREATE INCIDENT + NOTIFICATION
+======================== */
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 exports.createIncident = async (req, res) => {
   try {
     const incident = await Incident.create(req.body);
@@ -45,7 +63,13 @@ exports.createIncident = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 
+=======
+/* ========================
+   UPDATE INCIDENT STATUS + NOTIFICATION
+======================== */
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 exports.updateIncidentStatus = async (req, res) => {
   try {
     const incident = await Incident.findByPk(req.params.id);
@@ -57,6 +81,10 @@ exports.updateIncidentStatus = async (req, res) => {
     incident.status = req.body.status;
     await incident.save();
 
+<<<<<<< HEAD
+=======
+    // NOTIFICATION STATUS UPDATE
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
     try {
       await axios.post("http://localhost:4005/api/notifications", {
         message: `Incident #${incident.id} status updated to ${incident.status}`,
@@ -73,6 +101,12 @@ exports.updateIncidentStatus = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+=======
+/* ========================
+   DELETE INCIDENT
+======================== */
+>>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 exports.deleteIncident = async (req, res) => {
   try {
     const incident = await Incident.findByPk(req.params.id);
