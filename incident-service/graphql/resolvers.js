@@ -1,61 +1,58 @@
 const Incident = require("../models/Incident");
-<<<<<<< HEAD
 const axios = require("axios");
-=======
->>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
+
+const NOTIFICATION_URL =
+  process.env.NOTIFICATION_URL || "http://127.0.0.1:4005/api/notifications";
 
 const resolvers = {
 
   Query: {
-<<<<<<< HEAD
     incidents: async (_, __, { user }) => {
       if (!user) throw new Error("Authentication required");
+
       return await Incident.findAll();
     },
+
     incident: async (_, { id }, { user }) => {
       if (!user) throw new Error("Authentication required");
-=======
 
-    incidents: async () => {
-      return await Incident.findAll();
-    },
+      const incident = await Incident.findByPk(id);
+      if (!incident) throw new Error("Incident not found");
 
-    incident: async (_, { id }) => {
->>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
-      return await Incident.findByPk(id);
+      return incident;
     }
   },
 
   Mutation: {
-<<<<<<< HEAD
+    /* CREATE INCIDENT */
     createIncident: async (_, args, { user }) => {
       if (!user) throw new Error("Authentication required");
+
+      const incident = await Incident.create({
+        ...args,
+        status: args.status || "OPEN"
+      });
+
       
-      const incident = await Incident.create(args);
-      
-      // Notification Logic
       try {
-        // If an operator adds an incident, specifically notify ADMINS
-      
-        const target = user.role === "OPERATOR" ? "ALL" : "OPERATOR"; 
-       
-        
-        await axios.post("http://127.0.0.1:4005/api/notifications", {
-          message: `${user.role} ${user.id} reported new incident: ${incident.type} - ${incident.title}`,
-          type: "WARNING",
-          recipientRole: "ALL" // Making it visible to everyone ensures Admin sees it too
+        await axios.post(NOTIFICATION_URL, {
+          message: `New incident reported by ${user.role} #${user.id}: ${incident.type} - ${incident.title}`,
+          type: "INCIDENT",
+          recipientRole: "ALL"
         });
       } catch (err) {
-        console.error("Failed to call notification service:", err.message);
+        console.error("Notification error:", err.message);
       }
-      
+
       return incident;
     },
 
+    /* UPDATE STATUS */
     updateIncidentStatus: async (_, { id, status }, { user }) => {
       if (!user) throw new Error("Authentication required");
+
       if (user.role !== "ADMIN" && user.role !== "OPERATOR") {
-        throw new Error("Unauthorized action");
+        throw new Error("Unauthorized: only ADMIN or OPERATOR can update status");
       }
 
       const incident = await Incident.findByPk(id);
@@ -63,51 +60,38 @@ const resolvers = {
 
       incident.status = status;
       await incident.save();
+
+      // 🎯 Notification status update
+      try {
+        await axios.post(NOTIFICATION_URL, {
+          message: `Incident #${incident.id} status updated to ${status}`,
+          type: "STATUS_UPDATE",
+          recipientRole: "ALL"
+        });
+      } catch (err) {
+        console.error("Notification error:", err.message);
+      }
+
       return incident;
     },
 
+    /* DELETE INCIDENT */
     deleteIncident: async (_, { id }, { user }) => {
       if (!user) throw new Error("Authentication required");
-      if (user.role !== "ADMIN") throw new Error("Admin role required for deletion");
+
+      if (user.role !== "ADMIN") {
+        throw new Error("Unauthorized: Admin only");
+      }
 
       const incident = await Incident.findByPk(id);
       if (!incident) throw new Error("Incident not found");
 
       await incident.destroy();
-=======
 
-    createIncident: async (_, args) => {
-
-      return await Incident.create(args);
-    },
-
-    updateIncidentStatus: async (_, { id, status }) => {
-
-      const incident = await Incident.findByPk(id);
-
-      if (!incident) {
-        throw new Error("Incident not found");
-      }
-
-      incident.status = status;
-
-      await incident.save();
-
-      return incident;
-    },
-
-    deleteIncident: async (_, { id }) => {
-
-      const incident = await Incident.findByPk(id);
-
-      if (!incident) {
-        throw new Error("Incident not found");
-      }
-
-      await incident.destroy();
-
->>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
-      return "Incident deleted";
+      return {
+        success: true,
+        message: "Incident deleted successfully"
+      };
     }
   }
 };

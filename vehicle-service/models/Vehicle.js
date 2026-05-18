@@ -6,7 +6,6 @@ const Vehicle = sequelize.define("Vehicle", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-<<<<<<< HEAD
   model: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -19,8 +18,6 @@ const Vehicle = sequelize.define("Vehicle", {
     type: DataTypes.STRING,
     defaultValue: "Parked",
   }
-=======
->>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
 });
 
 module.exports = Vehicle;

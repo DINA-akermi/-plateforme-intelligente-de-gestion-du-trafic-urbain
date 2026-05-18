@@ -12,10 +12,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphql": "^16.14.0",
-<<<<<<< HEAD
     "jsonwebtoken": "^9.0.3",
-=======
->>>>>>> f668c8a5e1ecfe0121efe460e148ce82d39114f8
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3"
   },

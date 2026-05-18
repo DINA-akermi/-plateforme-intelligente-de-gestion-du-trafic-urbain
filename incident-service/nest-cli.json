@@ -1,0 +1,29 @@
+{
+  "monorepo": true,
+  "root": "apps/incident-service",
+  "sourceRoot": "apps/incident-service/src",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/incident-service/tsconfig.app.json"
+  },
+  "projects": {
+    "incident-service": {
+      "type": "application",
+      "root": "apps/incident-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/incident-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/incident-service/tsconfig.app.json"
+      }
+    },
+    "traffic-service": {
+      "type": "application",
+      "root": "apps/traffic-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/traffic-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/traffic-service/tsconfig.app.json"
+      }
+    }
+  }
+}
